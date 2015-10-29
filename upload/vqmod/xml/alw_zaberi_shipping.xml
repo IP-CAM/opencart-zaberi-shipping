@@ -1,0 +1,240 @@
+<modification>
+	<id>Курьерская служба «Забери-Товар»</id>
+	<version>1.0.0</version>
+	<vqmver>2.X</vqmver>
+	<author>Woewudski</author>
+
+	<file name="catalog/controller/checkout/confirm.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+$redirect = '';
+			]]></search>
+			<add><![CDATA[
+$alw_zaberi = $this->session->data['shipping_method'];
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search position="after"><![CDATA[
+$this->data['products'] = array();
+			]]></search>
+			<add><![CDATA[
+			$this->load->model('shipping/alw_zaberi');
+
+			if ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pickup' && isset($this->session->data['alw_zaberi_pickup_id']) && isset($this->session->data['alw_zaberi_city'])) {
+				$this->model_shipping_alw_zaberi->addOrderPickup($this->session->data['order_id'], $this->session->data['alw_zaberi_pickup_id'], $this->session->data['alw_zaberi_city']);
+			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_courier' && isset($this->session->data['alw_zaberi_city'])) {
+				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
+			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pochta' && isset($this->session->data['alw_zaberi_city'])) {
+				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/shipping_method.tpl">
+		<operation error="log">
+			<search position="before"><![CDATA[
+<?php if ($shipping_methods) { ?>
+			]]></search>
+			<add><![CDATA[
+<?php if ($this->config->get('alw_zaberi_map_pickup') == 1) { ?>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script type="text/javascript"><!--
+function get_zaberi_map(latitude, longitude, name) {
+	$('.alw_zaberi_colorbox').colorbox({
+		inline: true,
+		overlayClose: true,
+		width: 700,
+		height: 700,
+		opacity: 0.5,
+		onOpen: function(){
+			var myMap;
+			ymaps.ready(init);
+
+			function init () {
+				myMap = new ymaps.Map('cboxLoadedContent', {
+					center: [latitude, longitude],
+					zoom: 13
+				});
+
+				var myPlacemark = new ymaps.Placemark(myMap.getCenter(), {
+					balloonContentBody: [
+						'<address>',
+						'<strong>' + name + '</strong>',
+						'</address>'
+					].join('')
+				}, {
+					preset: 'islands#redDotIcon'
+				});
+
+				myMap.geoObjects.add(myPlacemark);
+			}
+		}
+	});
+}
+//--></script>
+<?php } ?>
+<script type="text/javascript"><!--
+function update_zaberi(pickup_id) {
+	$.ajax({
+		url: 'index.php?route=module/alw_zaberi/update_zaberi', 
+		type: 'post',
+		data: 'pickup_id=' + pickup_id,
+		dataType: 'json',
+		success: function(json) {
+			$('#button-shipping-address').trigger('click');
+		}
+	});
+}
+//--></script>
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace"><![CDATA[
+<?php echo $quote['title']; ?></label>
+			]]></search>
+			<add><![CDATA[
+<?php echo $quote['title']; ?><?php if (!empty($quote['zaberi_map'])) { ?><?php echo $quote['zaberi_map']; ?><?php } ?></label><?php if (!empty($quote['description'])) { ?><?php echo $quote['description']; ?><?php } ?>
+			]]></add>
+		</operation>
+	</file>
+
+	<file name="catalog/controller/checkout/simplecheckout.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+return $order_id;
+			]]></search>
+			<add><![CDATA[
+			$alw_zaberi = $this->session->data['shipping_method'];
+
+			$this->load->model('shipping/alw_zaberi');
+
+			if ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pickup' && isset($this->session->data['alw_zaberi_pickup_id']) && isset($this->session->data['alw_zaberi_city'])) {
+				$this->model_shipping_alw_zaberi->addOrderPickup($this->session->data['order_id'], $this->session->data['alw_zaberi_pickup_id'], $this->session->data['alw_zaberi_city']);
+			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_courier' && isset($this->session->data['alw_zaberi_city'])) {
+				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
+			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pochta' && isset($this->session->data['alw_zaberi_city'])) {
+				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/simplecheckout.tpl">
+		<operation error="log">
+			<search position="after"><![CDATA[
+<div class="simple-content">
+			]]></search>
+			<add><![CDATA[
+<?php if ($this->config->get('alw_zaberi_map_pickup') == 1) { ?>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script type="text/javascript"><!--
+function get_zaberi_map(latitude, longitude, name) {
+	$('.alw_zaberi_colorbox').colorbox({
+		inline: true,
+		overlayClose: true,
+		width: 700,
+		height: 700,
+		opacity: 0.5,
+		onOpen: function(){
+			var myMap;
+			ymaps.ready(init);
+
+			function init () {
+				myMap = new ymaps.Map('cboxLoadedContent', {
+					center: [latitude, longitude],
+					zoom: 13
+				});
+
+				var myPlacemark = new ymaps.Placemark(myMap.getCenter(), {
+					balloonContentBody: [
+						'<address>',
+						'<strong>' + name + '</strong>',
+						'</address>'
+					].join('')
+				}, {
+					preset: 'islands#redDotIcon'
+				});
+
+				myMap.geoObjects.add(myPlacemark);
+			}
+		}
+	});
+}
+//--></script>
+<?php } ?>
+<script type="text/javascript"><!--
+function update_zaberi(pickup_id) {
+	$.ajax({
+		url: 'index.php?route=module/alw_zaberi/update_zaberi', 
+		type: 'post',
+		data: 'pickup_id=' + pickup_id,
+		dataType: 'json',
+		success: function(json) {
+			simplecheckout_reload();
+		}
+	});
+}
+//--></script>
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/simplecheckout_shipping.tpl">
+		<operation error="log">
+			<search position="replace"><![CDATA[
+<?php echo $quote['title']; ?>
+			]]></search>
+			<add><![CDATA[
+<?php echo $quote['title']; ?><?php if (!empty($quote['zaberi_map'])) { ?><?php echo $quote['zaberi_map']; ?><?php } ?>
+			]]></add>
+		</operation>
+	</file>
+
+	<file name="admin/controller/sale/order.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+$this->model_sale_order->editOrder($this->request->get['order_id'], $this->request->post);
+			]]></search>
+			<add><![CDATA[
+			$this->load->model('shipping/alw_zaberi');
+
+			if ($this->request->post['shipping_code'] == 'alw_zaberi.alw_zaberi_pickup' && isset($this->session->data['alw_zaberi_pickup_id'])) {
+				$this->model_shipping_alw_zaberi->updateOrderPickup($this->request->get['order_id'], $this->session->data['alw_zaberi_pickup_id'], $this->request->post['shipping_code']);
+			} elseif ($this->request->post['shipping_code'] == 'alw_zaberi.alw_zaberi_courier' || $this->request->post['shipping_code'] == 'alw_zaberi.alw_zaberi_pochta') {
+				$this->model_shipping_alw_zaberi->updateOrderOther($this->request->get['order_id'], $this->request->post['shipping_code']);
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/sale/order_form.tpl">
+		<operation error="log">
+			<search position="after"><![CDATA[
+if (json['shipping_method'][i]['quote'][j]['code'] == $('input[name=\'shipping_code\']').attr('value')) {
+			]]></search>
+			<add><![CDATA[
+								if (json['shipping_method'][i]['quote'][j]['code'] == 'alw_zaberi.alw_zaberi_pickup' && json['shipping_method'][i]['quote'][j]['description']) {
+									$('#alw_zaberi_select').remove();
+									$('select[name=\'shipping\']').after('<div id="alw_zaberi_select"></br>Выбрать другой ПВЗ:' + json['shipping_method'][i]['quote'][j]['description'] + '</div>');
+								}
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search position="before"><![CDATA[
+<?php echo $footer; ?>
+			]]></search>
+			<add><![CDATA[
+<script type="text/javascript"><!--
+function update_zaberi(pickup_id) {
+	$.ajax({
+		url: '<?php echo $store_url; ?>index.php?route=module/alw_zaberi/update_zaberi', 
+		type: 'post',
+		data: 'pickup_id=' + pickup_id,
+		dataType: 'json',
+		success: function(json) {
+			$('#button-update').trigger('click');
+		}
+	});
+}
+//--></script>
+			]]></add>
+		</operation>
+	</file>
+</modification>

@@ -1,0 +1,1 @@
+<?phpclass ControllerModuleAlwZaberi extends Controller {	public function update_zaberi() {		if (isset($this->request->post['pickup_id'])) {			$this->session->data['alw_zaberi_pickup_id'] = $this->request->post['pickup_id'];		}	}}?>
