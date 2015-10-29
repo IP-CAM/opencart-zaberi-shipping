@@ -18,4 +18,14 @@
 - Установить модуль.
 
 ## Скриншоты
-(https://raw.github.com/Woewudski/)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/01.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/02.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/03.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/04.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/05.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/06.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/07.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/08.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/09.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/10.png)
+(https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/11.png)
