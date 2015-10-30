@@ -40,6 +40,7 @@ class ModelShippingAlwZaberi extends Model {
 				if (isset($address_city)) {
 					$weight = 0;
 					$cost = 0;
+					$alw_zaberi = '';
 
 					foreach ($this->cart->getProducts() as $product) {
 						if ($product['shipping']) {
@@ -55,7 +56,9 @@ class ModelShippingAlwZaberi extends Model {
 						$weight += $this->config->get('alw_zaberi_added_weight');
 					}
 
-					$alw_zaberi = $this->cache->get('alw_zaberi.' . $this->translit($address_city));
+					if ($this->config->get('alw_zaberi_cache') == 1) {
+						$alw_zaberi = $this->cache->get('alw_zaberi.' . $this->translit($address_city) . '.' . $sub_total . '.' . ceil($weight));
+					}
 
 					if (!$alw_zaberi) {
 						$alw_zaberi = array();
@@ -68,7 +71,9 @@ class ModelShippingAlwZaberi extends Model {
 							$this->session->data['alw_zaberi_city'] = $alw_zaberi['alw_zaberi_city'];
 						}
 
-						$this->cache->set('alw_zaberi.' . $this->translit($address_city), $alw_zaberi);
+						if ($this->config->get('alw_zaberi_cache') == 1) {
+							$this->cache->set('alw_zaberi.' . $this->translit($address_city) . '.' . $sub_total . '.' . ceil($weight), $alw_zaberi);
+						}
 					}
 
 					if (!empty($alw_zaberi['alw_zaberi_cost'])) {
@@ -89,7 +94,7 @@ class ModelShippingAlwZaberi extends Model {
 						);
 
 						$output = array(
-							'days' => $courier_srok_dostavki + $this->config->get('alw_zaberi_added_days_courier')
+							'days' => $courier_srok_dostavki
 						);
 
 						$title = html_entity_decode(str_replace($input, $output, $this->config->get('alw_zaberi_description_courier')));
@@ -148,6 +153,7 @@ class ModelShippingAlwZaberi extends Model {
 				if (isset($address_city)) {
 					$weight = 0;
 					$cost = 0;
+					$alw_zaberi = '';
 
 					foreach ($this->cart->getProducts() as $product) {
 						if ($product['shipping']) {
@@ -163,7 +169,9 @@ class ModelShippingAlwZaberi extends Model {
 						$weight += $this->config->get('alw_zaberi_added_weight');
 					}
 
-					$alw_zaberi = $this->cache->get('alw_zaberi.' . $this->translit($address_city));
+					if ($this->config->get('alw_zaberi_cache') == 1) {
+						$alw_zaberi = $this->cache->get('alw_zaberi.' . $this->translit($address_city) . '.' . $sub_total . '.' . ceil($weight));
+					}
 
 					if (!$alw_zaberi) {
 						$alw_zaberi = array();
@@ -176,7 +184,9 @@ class ModelShippingAlwZaberi extends Model {
 							$this->session->data['alw_zaberi_city'] = $alw_zaberi['alw_zaberi_city'];
 						}
 
-						$this->cache->set('alw_zaberi.' . $this->translit($address_city), $alw_zaberi);
+						if ($this->config->get('alw_zaberi_cache') == 1) {
+							$this->cache->set('alw_zaberi.' . $this->translit($address_city) . '.' . $sub_total . '.' . ceil($weight), $alw_zaberi);
+						}
 					}
 
 					if (!empty($alw_zaberi['alw_zaberi_cost'])) {
@@ -251,93 +261,95 @@ class ModelShippingAlwZaberi extends Model {
 
 						$pickup_key = reset($pickup_temp);
 
-						if (!isset($this->session->data['alw_zaberi_pickup_id']) || empty($pickup_adress)) {
-							$cost = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['tarif_price'];
+						if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key])) {
+							if (!isset($this->session->data['alw_zaberi_pickup_id']) || empty($pickup_adress)) {
+								$cost = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['tarif_price'];
 
-							if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['proezd_info'])) {
-								$pickup_proezd_info = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['proezd_info'];
-							} else {
-								$pickup_proezd_info = '';
-							}
+								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['proezd_info'])) {
+									$pickup_proezd_info = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['proezd_info'];
+								} else {
+									$pickup_proezd_info = '';
+								}
 
-							if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['phone'])) {
-								$pickup_phone = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['phone'];
-							} else {
-								$pickup_phone = '';
-							}
+								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['phone'])) {
+									$pickup_phone = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['phone'];
+								} else {
+									$pickup_phone = '';
+								}
 
-							if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['srok_dostavki'])) {
-								$pickup_srok_dostavki = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['srok_dostavki'];
-							} else {
-								$pickup_srok_dostavki = '';
-							}
+								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['srok_dostavki'])) {
+									$pickup_srok_dostavki = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['srok_dostavki'];
+								} else {
+									$pickup_srok_dostavki = '';
+								}
 
-							if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['adress'])) {
-								$pickup_adress = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['adress'];
-							} else {
-								$pickup_adress = '';
-							}
+								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['adress'])) {
+									$pickup_adress = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['adress'];
+								} else {
+									$pickup_adress = '';
+								}
 
-							if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['worktime'])) {
-								$pickup_worktime = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['worktime'];
-							} else {
-								$pickup_worktime = '';
-							}
+								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['worktime'])) {
+									$pickup_worktime = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['worktime'];
+								} else {
+									$pickup_worktime = '';
+								}
 
-							if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['latitude'])) {
-								$pickup_latitude = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['latitude'];
-							} else {
-								$pickup_latitude = '';
-							}
+								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['latitude'])) {
+									$pickup_latitude = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['latitude'];
+								} else {
+									$pickup_latitude = '';
+								}
 
-							if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['longitude'])) {
-								$pickup_longitude = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['longitude'];
-							} else {
-								$pickup_longitude = '';
+								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['longitude'])) {
+									$pickup_longitude = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['longitude'];
+								} else {
+									$pickup_longitude = '';
+								}
 							}
 
 							$this->session->data['alw_zaberi_pickup_id'] = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['cod'];
-						}
 
-						$input = array(
-							'{adress}',
-							'{worktime}',
-							'{info}',
-							'{phone}',
-							'{days}'
-						);
-
-						$output = array(
-							'adress'    => $pickup_adress,
-							'worktime'  => $pickup_worktime,
-							'info' 		=> $pickup_proezd_info,
-							'phone'     => $pickup_phone,
-							'days' 		=> $pickup_srok_dostavki + $this->config->get('alw_zaberi_added_days_pickup')
-						);
-
-						$title = html_entity_decode(str_replace($input, $output, $this->config->get('alw_zaberi_description_pickup')));
-
-						if ($this->config->get('alw_zaberi_map_pickup') == 1) {
-							$map = ' <a class="alw_zaberi_colorbox" onclick="get_zaberi_map(' . $pickup_latitude . ',' . $pickup_longitude . ',\'' . $pickup_adress . '\');">' . $this->language->get('text_map') . '</a>';
-						}
-						
-						if ($this->config->get('config_currency') == 'RUB') {
-							$text = $this->currency->format($this->tax->calculate($cost, $this->config->get('alw_zaberi_tax_class_id_pickup'), $this->config->get('config_tax')));
-						} else {
-							$text = $this->currency->format($this->currency->convert($this->tax->calculate($cost, $this->config->get('alw_zaberi_tax_class_id_pickup'), $this->config->get('config_tax')), 'RUB', $this->config->get('config_currency')));
-						}
-
-						if (isset($title)) {
-							$quote_data_pickup['alw_zaberi_pickup'] = array(
-								'code'          	=> 'alw_zaberi.alw_zaberi_pickup',
-								'title'         	=> $title,
-								'zaberi_map'    	=> $map,
-								'cost'          	=> $cost,
-								'tax_class_id' 	 	=> $this->config->get('alw_zaberi_tax_class_id_pickup'),
-								'text'          	=> $text,
-								'delivery_type'	 	=> 'pickup',
-								'description'		=> $pickups
+							$input = array(
+								'{adress}',
+								'{worktime}',
+								'{info}',
+								'{phone}',
+								'{days}'
 							);
+
+							$output = array(
+								'adress'    => $pickup_adress,
+								'worktime'  => $pickup_worktime,
+								'info' 		=> $pickup_proezd_info,
+								'phone'     => $pickup_phone,
+								'days' 		=> $pickup_srok_dostavki
+							);
+
+							$title = html_entity_decode(str_replace($input, $output, $this->config->get('alw_zaberi_description_pickup')));
+
+							if ($this->config->get('alw_zaberi_map_pickup') == 1) {
+								$map = ' <a class="alw_zaberi_colorbox" onclick="get_zaberi_map(' . $pickup_latitude . ',' . $pickup_longitude . ',\'' . $pickup_adress . '\');">' . $this->language->get('text_map') . '</a>';
+							}
+						
+							if ($this->config->get('config_currency') == 'RUB') {
+								$text = $this->currency->format($this->tax->calculate($cost, $this->config->get('alw_zaberi_tax_class_id_pickup'), $this->config->get('config_tax')));
+							} else {
+								$text = $this->currency->format($this->currency->convert($this->tax->calculate($cost, $this->config->get('alw_zaberi_tax_class_id_pickup'), $this->config->get('config_tax')), 'RUB', $this->config->get('config_currency')));
+							}
+
+							if (isset($title)) {
+								$quote_data_pickup['alw_zaberi_pickup'] = array(
+									'code'          	=> 'alw_zaberi.alw_zaberi_pickup',
+									'title'         	=> $title,
+									'zaberi_map'    	=> $map,
+									'cost'          	=> $cost,
+									'tax_class_id' 	 	=> $this->config->get('alw_zaberi_tax_class_id_pickup'),
+									'text'          	=> $text,
+									'delivery_type'	 	=> 'pickup',
+									'description'		=> $pickups
+								);
+							}
 						}
 					}
 				}
@@ -412,7 +424,7 @@ class ModelShippingAlwZaberi extends Model {
 		}
 	}
 
-    function getCity ($address_city) {
+    protected function getCity ($address_city) {
 		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 				<methodCall>
 					<methodName>get_cities</methodName>
@@ -480,7 +492,7 @@ class ModelShippingAlwZaberi extends Model {
 		}
     }
 
-    function getCost($service, $order_amount, $d_price, $city, $to_city, $weight) {
+    protected function getCost($service, $order_amount, $d_price, $city, $to_city, $weight) {
 		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 				<methodCall>
 					<methodName>show_pv_text</methodName>

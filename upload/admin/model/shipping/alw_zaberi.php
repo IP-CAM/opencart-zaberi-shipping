@@ -512,11 +512,11 @@ class ModelShippingAlwZaberi extends Model {
 		}
 	}
 
-	function updateOrderPickup($order_id, $pickup_id, $shipping_code) {
+	public function updateOrderPickup($order_id, $pickup_id, $shipping_code) {
 		$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET final_pv = '" . $this->db->escape($pickup_id) . "', shipping_code = '" . $this->db->escape($shipping_code) . "' WHERE order_id = '" . (int)$order_id . "'");
 	}
 
-	function updateOrderOther($order_id, $shipping_code) {
+	public function updateOrderOther($order_id, $shipping_code) {
 		$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET shipping_code = '" . $this->db->escape($shipping_code) . "' WHERE order_id = '" . (int)$order_id . "'");
 	}
 

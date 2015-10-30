@@ -116,6 +116,20 @@
 			</td>
           </tr>
           <tr>
+            <td><?php echo $entry_cache; ?></td>
+            <td>
+				<select name="settings[alw_zaberi_cache]">
+                <?php if ($alw_zaberi_cache) { ?>
+                <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                <option value="0"><?php echo $text_disabled; ?></option>
+                <?php } else { ?>
+                <option value="1"><?php echo $text_enabled; ?></option>
+                <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                <?php } ?>
+              </select>
+			</td>
+          </tr>
+          <tr>
             <td><?php echo $entry_debug; ?></td>
             <td>
 				<select name="settings[alw_zaberi_debug]">
@@ -145,10 +159,6 @@
           <tr>
             <td><?php echo $entry_max_cost; ?></td>
             <td><input type="text" name="courier[alw_zaberi_max_cost_courier]" value="<?php echo $alw_zaberi_max_cost_courier; ?>" /></td>
-          </tr>
-          <tr>
-            <td><?php echo $entry_added_days; ?></td>
-            <td><input type="text" name="courier[alw_zaberi_added_days_courier]" value="<?php echo $alw_zaberi_added_days_courier; ?>" /></td>
           </tr>
           <tr>
             <td><?php echo $entry_status_rus; ?></td>
@@ -228,10 +238,6 @@
           <tr>
             <td><?php echo $entry_max_cost; ?></td>
             <td><input type="text" name="pickup[alw_zaberi_max_cost_pickup]" value="<?php echo $alw_zaberi_max_cost_pickup; ?>" /></td>
-          </tr>
-          <tr>
-            <td><?php echo $entry_added_days; ?></td>
-            <td><input type="text" name="pickup[alw_zaberi_added_days_pickup]" value="<?php echo $alw_zaberi_added_days_pickup; ?>" /></td>
           </tr>
           <tr>
             <td><?php echo $entry_status_rus; ?></td>

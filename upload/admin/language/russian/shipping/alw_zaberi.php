@@ -67,6 +67,7 @@ $_['entry_default_weight']   	= 'Вес, если не задан<span class="he
 $_['entry_added_weight']   		= 'Прибавлять вес к заказу<span class="help">килограммы</span>';
 $_['entry_sort_order']	  		= 'Порядок сортировки';
 $_['entry_status']        		= 'Статус';
+$_['entry_cache']        		= 'Кэширование';
 $_['entry_debug']   			= 'Режим отладки';
 $_['entry_desc_courier']   		= 'Описание<span class="help"></br><b>{days}</b> - срок доставки</span>';
 $_['entry_desc_pickup']   		= 'Описание<span class="help"></br><b>{adress}</b> - адрес ПВЗ</br><b>{worktime}</b> - график работы</br><b>{info}</b> - информация о проезде</br><b>{phone}</b> - телефон ПВЗ</br><b>{days}</b> - срок доставки</span>';
@@ -74,7 +75,6 @@ $_['entry_desc_pochta']   		= 'Описание';
 $_['entry_map']      			= 'Отображать ссылку на карту';
 $_['entry_min_cost']      		= 'Минимальная сумма заказа';
 $_['entry_max_cost']      		= 'Максимальная сумма заказа';
-$_['entry_added_days']      	= 'Прибавлять дни к доставке';
 $_['entry_status_rus']    		= 'Скрывать способ, пока не будет выбрана РФ';
 $_['entry_tax_class'] 	  		= 'Налоговый класс';
 $_['entry_geo_zone']  	  		= 'Географическая зона';

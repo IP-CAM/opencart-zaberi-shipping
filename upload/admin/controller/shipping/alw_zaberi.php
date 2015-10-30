@@ -40,6 +40,7 @@ class ControllerShippingAlwZaberi extends Controller {
 		$this->data['entry_added_weight'] = $this->language->get('entry_added_weight');
 		$this->data['entry_sort_order'] = $this->language->get('entry_sort_order');
 		$this->data['entry_status'] = $this->language->get('entry_status');
+		$this->data['entry_cache'] = $this->language->get('entry_cache');
 		$this->data['entry_debug'] = $this->language->get('entry_debug');
 		$this->data['entry_title'] = $this->language->get('entry_title');
 		$this->data['entry_desc_courier'] = $this->language->get('entry_desc_courier');
@@ -49,7 +50,6 @@ class ControllerShippingAlwZaberi extends Controller {
 		$this->data['entry_map'] = $this->language->get('entry_map');
 		$this->data['entry_min_cost'] = $this->language->get('entry_min_cost');
 		$this->data['entry_max_cost'] = $this->language->get('entry_max_cost');
-		$this->data['entry_added_days'] = $this->language->get('entry_added_days');
 		$this->data['entry_status_rus'] = $this->language->get('entry_status_rus');
 		$this->data['entry_tax_class'] = $this->language->get('entry_tax_class');
 		$this->data['entry_geo_zone'] = $this->language->get('entry_geo_zone');
@@ -192,6 +192,12 @@ class ControllerShippingAlwZaberi extends Controller {
 			$this->data['alw_zaberi_status'] = $this->config->get('alw_zaberi_status');
 		}
 
+		if (isset($this->request->post['settings']['alw_zaberi_cache'])) {
+			$this->data['alw_zaberi_cache'] = $this->request->post['settings']['alw_zaberi_cache'];
+		} else {
+			$this->data['alw_zaberi_cache'] = $this->config->get('alw_zaberi_cache');
+		}
+
 		if (isset($this->request->post['settings']['alw_zaberi_debug'])) {
 			$this->data['alw_zaberi_debug'] = $this->request->post['settings']['alw_zaberi_debug'];
 		} else {
@@ -245,12 +251,6 @@ class ControllerShippingAlwZaberi extends Controller {
 			$this->data['alw_zaberi_max_cost_courier'] = $this->request->post['courier']['alw_zaberi_max_cost_courier'];
 		} else {
 			$this->data['alw_zaberi_max_cost_courier'] = $this->config->get('alw_zaberi_max_cost_courier');
-		}
-
-		if (isset($this->request->post['courier']['alw_zaberi_added_days_courier'])) {
-			$this->data['alw_zaberi_added_days_courier'] = $this->request->post['courier']['alw_zaberi_added_days_courier'];
-		} else {
-			$this->data['alw_zaberi_added_days_courier'] = $this->config->get('alw_zaberi_added_days_courier');
 		}
 
 		if (isset($this->request->post['courier']['alw_zaberi_status_rus_courier'])) {
@@ -308,12 +308,6 @@ class ControllerShippingAlwZaberi extends Controller {
 			$this->data['alw_zaberi_max_cost_pickup'] = $this->request->post['pickup']['alw_zaberi_max_cost_pickup'];
 		} else {
 			$this->data['alw_zaberi_max_cost_pickup'] = $this->config->get('alw_zaberi_max_cost_pickup');
-		}
-
-		if (isset($this->request->post['pickup']['alw_zaberi_added_days_pickup'])) {
-			$this->data['alw_zaberi_added_days_pickup'] = $this->request->post['pickup']['alw_zaberi_added_days_pickup'];
-		} else {
-			$this->data['alw_zaberi_added_days_pickup'] = $this->config->get('alw_zaberi_added_days_pickup');
 		}
 
 		if (isset($this->request->post['pickup']['alw_zaberi_status_rus_pickup'])) {
@@ -793,20 +787,6 @@ class ControllerShippingAlwZaberi extends Controller {
 			return false;
 		}	
 	}
-
-    public function update() {
-        $this->language->load('shipping/alw_zaberi');
-
-		$this->load->model('shipping/alw_zaberi');
-
-        $this->model_shipping_alw_zaberi->uninstall();
-
-		$this->model_shipping_alw_zaberi->install();
-
-		$this->session->data['success'] = $this->language->get('text_success');
-
-		$this->redirect($this->url->link('shipping/alw_zaberi', 'token=' . $this->session->data['token'], 'SSL'));
-    }
 
     public function install() {
         $this->load->model('shipping/alw_zaberi');
