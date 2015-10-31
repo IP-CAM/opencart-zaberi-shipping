@@ -30,6 +30,7 @@
 		<a href="#tab_pickup"><?php echo $tab_pickup; ?></a>
 		<a href="#tab_pochta"><?php echo $tab_pochta; ?></a>
 		<a href="#tab_export"><?php echo $tab_export; ?></a>
+		<a href="#tab_status"><?php echo $tab_status; ?></a>
 	  </div>
 
       <div id="tab_settings" class="vtabs-content">
@@ -457,6 +458,139 @@
             <td><?php echo $entry_ibik; ?></td>
 			<td><input type="text" name="settings[alw_zaberi_export_ibik]" value="<?php echo $alw_zaberi_export_ibik; ?>" style="width: 50%" /></td>
           </tr>
+        </table>
+	  </div>
+
+	  <div id="tab_status" class="vtabs-content">
+        <table class="list">
+          <thead>
+            <tr>
+              <td class="right"><?php echo $text_status_export; ?></td>
+              <td class="left"><?php echo $text_status_order; ?></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="right"><?php echo $text_export_success_1; ?></td>
+              <td class="left">
+				<select name="settings[alw_zaberi_export_status_1]">
+                  <option value="0"><?php echo $text_none; ?></option>
+				  <?php foreach ($order_statuses as $order_status) { ?>
+                  <?php if ($order_status['order_status_id'] == $alw_zaberi_export_status_1) { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+			  </td>
+            </tr>
+            <tr>
+              <td class="right"><?php echo $text_export_success_2; ?></td>
+              <td class="left">
+				<select name="settings[alw_zaberi_export_status_2]">
+                  <option value="0"><?php echo $text_none; ?></option>
+				  <?php foreach ($order_statuses as $order_status) { ?>
+                  <?php if ($order_status['order_status_id'] == $alw_zaberi_export_status_2) { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+			  </td>
+            </tr>
+            <tr>
+              <td class="right"><?php echo $text_export_success_3; ?></td>
+              <td class="left">
+				<select name="settings[alw_zaberi_export_status_3]">
+                  <option value="0"><?php echo $text_none; ?></option>
+				  <?php foreach ($order_statuses as $order_status) { ?>
+                  <?php if ($order_status['order_status_id'] == $alw_zaberi_export_status_3) { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+			  </td>
+            </tr>
+            <tr>
+              <td class="right"><?php echo $text_export_success_5; ?></td>
+              <td class="left">
+				<select name="settings[alw_zaberi_export_status_5]">
+                  <option value="0"><?php echo $text_none; ?></option>
+				  <?php foreach ($order_statuses as $order_status) { ?>
+                  <?php if ($order_status['order_status_id'] == $alw_zaberi_export_status_5) { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+			  </td>
+            </tr>
+            <tr>
+              <td class="right"><?php echo $text_export_success_10; ?></td>
+              <td class="left">
+				<select name="settings[alw_zaberi_export_status_10]">
+                  <option value="0"><?php echo $text_none; ?></option>
+				  <?php foreach ($order_statuses as $order_status) { ?>
+                  <?php if ($order_status['order_status_id'] == $alw_zaberi_export_status_10) { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+			  </td>
+            </tr>
+            <tr>
+              <td class="right"><?php echo $text_export_success_49; ?></td>
+              <td class="left">
+				<select name="settings[alw_zaberi_export_status_49]">
+                  <option value="0"><?php echo $text_none; ?></option>
+				  <?php foreach ($order_statuses as $order_status) { ?>
+                  <?php if ($order_status['order_status_id'] == $alw_zaberi_export_status_49) { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+			  </td>
+            </tr>
+            <tr>
+              <td class="right"><?php echo $text_export_success_50; ?></td>
+              <td class="left">
+				<select name="settings[alw_zaberi_export_status_50]">
+                  <option value="0"><?php echo $text_none; ?></option>
+				  <?php foreach ($order_statuses as $order_status) { ?>
+                  <?php if ($order_status['order_status_id'] == $alw_zaberi_export_status_50) { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+			  </td>
+            </tr>
+            <tr>
+              <td class="right"><?php echo $text_export_success_51; ?></td>
+              <td class="left">
+				<select name="settings[alw_zaberi_export_status_51]">
+                  <option value="0"><?php echo $text_none; ?></option>
+				  <?php foreach ($order_statuses as $order_status) { ?>
+                  <?php if ($order_status['order_status_id'] == $alw_zaberi_export_status_51) { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+			  </td>
+            </tr>
+          </tbody>
         </table>
 	  </div>
 

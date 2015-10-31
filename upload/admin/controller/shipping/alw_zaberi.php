@@ -31,6 +31,7 @@ class ControllerShippingAlwZaberi extends Controller {
 		$this->data['tab_pickup'] = $this->language->get('tab_pickup');
 		$this->data['tab_pochta'] = $this->language->get('tab_pochta');
 		$this->data['tab_export'] = $this->language->get('tab_export');
+		$this->data['tab_status'] = $this->language->get('tab_status');
 		$this->data['entry_login'] = $this->language->get('entry_login');
 		$this->data['entry_key'] = $this->language->get('entry_key');
 		$this->data['entry_country'] = $this->language->get('entry_country');
@@ -78,6 +79,16 @@ class ControllerShippingAlwZaberi extends Controller {
 		$this->data['text_pochta_without'] = $this->language->get('text_pochta_without');
 		$this->data['text_pochta_with'] = $this->language->get('text_pochta_with');
 		$this->data['text_pochta_ur'] = $this->language->get('text_pochta_ur');
+		$this->data['text_status_export'] = $this->language->get('text_status_export');
+		$this->data['text_status_order'] = $this->language->get('text_status_order');
+		$this->data['text_export_success_1'] = $this->language->get('text_export_success_1');
+		$this->data['text_export_success_2'] = $this->language->get('text_export_success_2');
+		$this->data['text_export_success_3'] = $this->language->get('text_export_success_3');
+		$this->data['text_export_success_5'] = $this->language->get('text_export_success_5');
+		$this->data['text_export_success_10'] = $this->language->get('text_export_success_10');
+		$this->data['text_export_success_49'] = $this->language->get('text_export_success_49');
+		$this->data['text_export_success_50'] = $this->language->get('text_export_success_50');
+		$this->data['text_export_success_51'] = $this->language->get('text_export_success_51');
 
 		if (isset($this->session->data['warning'])) {
 			$this->data['warning'] = $this->session->data['warning'];
@@ -480,6 +491,54 @@ class ControllerShippingAlwZaberi extends Controller {
 			$this->data['alw_zaberi_export_ibik'] = $this->config->get('alw_zaberi_export_ibik');
 		}
 
+		if (isset($this->request->post['settings']['alw_zaberi_export_status_1'])) {
+			$this->data['alw_zaberi_export_status_1'] = $this->request->post['settings']['alw_zaberi_export_status_1'];
+		} else {
+			$this->data['alw_zaberi_export_status_1'] = $this->config->get('alw_zaberi_export_status_1');
+		}
+
+		if (isset($this->request->post['settings']['alw_zaberi_export_status_2'])) {
+			$this->data['alw_zaberi_export_status_2'] = $this->request->post['settings']['alw_zaberi_export_status_2'];
+		} else {
+			$this->data['alw_zaberi_export_status_2'] = $this->config->get('alw_zaberi_export_status_2');
+		}
+
+		if (isset($this->request->post['settings']['alw_zaberi_export_status_3'])) {
+			$this->data['alw_zaberi_export_status_3'] = $this->request->post['settings']['alw_zaberi_export_status_3'];
+		} else {
+			$this->data['alw_zaberi_export_status_3'] = $this->config->get('alw_zaberi_export_status_3');
+		}
+
+		if (isset($this->request->post['settings']['alw_zaberi_export_status_5'])) {
+			$this->data['alw_zaberi_export_status_5'] = $this->request->post['settings']['alw_zaberi_export_status_5'];
+		} else {
+			$this->data['alw_zaberi_export_status_5'] = $this->config->get('alw_zaberi_export_status_5');
+		}
+
+		if (isset($this->request->post['settings']['alw_zaberi_export_status_10'])) {
+			$this->data['alw_zaberi_export_status_10'] = $this->request->post['settings']['alw_zaberi_export_status_10'];
+		} else {
+			$this->data['alw_zaberi_export_status_10'] = $this->config->get('alw_zaberi_export_status_10');
+		}
+
+		if (isset($this->request->post['settings']['alw_zaberi_export_status_49'])) {
+			$this->data['alw_zaberi_export_status_49'] = $this->request->post['settings']['alw_zaberi_export_status_49'];
+		} else {
+			$this->data['alw_zaberi_export_status_49'] = $this->config->get('alw_zaberi_export_status_49');
+		}
+
+		if (isset($this->request->post['settings']['alw_zaberi_export_status_50'])) {
+			$this->data['alw_zaberi_export_status_50'] = $this->request->post['settings']['alw_zaberi_export_status_50'];
+		} else {
+			$this->data['alw_zaberi_export_status_50'] = $this->config->get('alw_zaberi_export_status_50');
+		}
+
+		if (isset($this->request->post['settings']['alw_zaberi_export_status_51'])) {
+			$this->data['alw_zaberi_export_status_51'] = $this->request->post['settings']['alw_zaberi_export_status_51'];
+		} else {
+			$this->data['alw_zaberi_export_status_51'] = $this->config->get('alw_zaberi_export_status_51');
+		}
+
 		$this->template = 'shipping/alw_zaberi.tpl';
 
 		$this->children = array(
@@ -585,12 +644,12 @@ class ControllerShippingAlwZaberi extends Controller {
 		$results = $this->model_shipping_alw_zaberi->getOrders($data);
 
     	foreach ($results as $result) {
-			if ($result['shipping_code'] == 'alw_zaberi.alw_zaberi_courier') {
-				$shipping_method = $this->language->get('tab_courier');
-			} elseif ($result['shipping_code'] == 'alw_zaberi.alw_zaberi_pickup') {
+			if ($result['shipping_code'] == 'alw_zaberi.alw_zaberi_pickup') {
 				$shipping_method = $this->language->get('tab_pickup');
 			} elseif ($result['shipping_code'] == 'alw_zaberi.alw_zaberi_pochta') {
 				$shipping_method = $this->language->get('tab_pochta');
+			} else {
+				$shipping_method = $this->language->get('tab_courier');
 			}
 
 			if ($result['status'] > 0) {

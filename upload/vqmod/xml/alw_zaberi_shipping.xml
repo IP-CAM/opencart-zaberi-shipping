@@ -19,8 +19,8 @@ $this->data['products'] = array();
 			<add><![CDATA[
 			$this->load->model('shipping/alw_zaberi');
 
-			if ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pickup' && isset($this->session->data['alw_zaberi_pickup_id']) && isset($this->session->data['alw_zaberi_city'])) {
-				$this->model_shipping_alw_zaberi->addOrderPickup($this->session->data['order_id'], $this->session->data['alw_zaberi_pickup_id'], $this->session->data['alw_zaberi_city']);
+			if ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pickup' && isset($this->session->data['alw_zaberi_pickup_id']) && isset($this->session->data['alw_zaberi_pickup_adress']) && isset($this->session->data['alw_zaberi_pickup_phone']) && isset($this->session->data['alw_zaberi_city'])) {
+				$this->model_shipping_alw_zaberi->addOrderPickup($this->session->data['order_id'], $this->session->data['alw_zaberi_pickup_id'], $this->session->data['alw_zaberi_pickup_adress'], $this->session->data['alw_zaberi_pickup_phone'], $this->session->data['alw_zaberi_city']);
 			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_courier' && isset($this->session->data['alw_zaberi_city'])) {
 				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
 			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pochta' && isset($this->session->data['alw_zaberi_city'])) {
@@ -107,8 +107,8 @@ return $order_id;
 
 			$this->load->model('shipping/alw_zaberi');
 
-			if ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pickup' && isset($this->session->data['alw_zaberi_pickup_id']) && isset($this->session->data['alw_zaberi_city'])) {
-				$this->model_shipping_alw_zaberi->addOrderPickup($this->session->data['order_id'], $this->session->data['alw_zaberi_pickup_id'], $this->session->data['alw_zaberi_city']);
+			if ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pickup' && isset($this->session->data['alw_zaberi_pickup_id']) && isset($this->session->data['alw_zaberi_pickup_adress']) && isset($this->session->data['alw_zaberi_pickup_phone']) && isset($this->session->data['alw_zaberi_city'])) {
+				$this->model_shipping_alw_zaberi->addOrderPickup($this->session->data['order_id'], $this->session->data['alw_zaberi_pickup_id'], $this->session->data['alw_zaberi_pickup_adress'], $this->session->data['alw_zaberi_pickup_phone'], $this->session->data['alw_zaberi_city']);
 			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_courier' && isset($this->session->data['alw_zaberi_city'])) {
 				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
 			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pochta' && isset($this->session->data['alw_zaberi_city'])) {
@@ -197,8 +197,6 @@ $this->model_sale_order->editOrder($this->request->get['order_id'], $this->reque
 
 			if ($this->request->post['shipping_code'] == 'alw_zaberi.alw_zaberi_pickup' && isset($this->session->data['alw_zaberi_pickup_id'])) {
 				$this->model_shipping_alw_zaberi->updateOrderPickup($this->request->get['order_id'], $this->session->data['alw_zaberi_pickup_id'], $this->request->post['shipping_code']);
-			} elseif ($this->request->post['shipping_code'] == 'alw_zaberi.alw_zaberi_courier' || $this->request->post['shipping_code'] == 'alw_zaberi.alw_zaberi_pochta') {
-				$this->model_shipping_alw_zaberi->updateOrderOther($this->request->get['order_id'], $this->request->post['shipping_code']);
 			}
 			]]></add>
 		</operation>

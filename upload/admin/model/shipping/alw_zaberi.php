@@ -197,12 +197,12 @@ class ModelShippingAlwZaberi extends Model {
 
 			$int_number = '';
 
-			if ($query->row['shipping_code'] == 'alw_zaberi.alw_zaberi_courier') {
-				$service = 2;
-			} elseif ($query->row['shipping_code'] == 'alw_zaberi.alw_zaberi_pickup') {
+			if ($query->row['shipping_code'] == 'alw_zaberi.alw_zaberi_pickup') {
 				$service = 1;
 			} elseif ($query->row['shipping_code'] == 'alw_zaberi.alw_zaberi_pochta') {
 				$service = 3;
+			} else {
+				$service = 2;
 			}
 
 			$d_price = $this->currency->convert($query->row['total'], $query->row['currency_code'], $this->config->get('config_currency'));
@@ -513,21 +513,13 @@ class ModelShippingAlwZaberi extends Model {
 							unset($element_name);
 						} elseif ($reader->localName == 'params' && $reader->nodeType == XMLReader::END_ELEMENT) {
 							if (!empty($items) && $status == 'Ok') {
-								if (isset($items[0]['pvz_address'])) {
-									$pvz_address = $items[0]['pvz_address'];
-								} else {
-									$pvz_address = '';
-								}
+								$alw_zaberi_export_status = 'alw_zaberi_export_status_' . $items[0]['status'];
 
-								if (isset($items[0]['pvz_phone'])) {
-									$pvz_phone = $items[0]['pvz_phone'];
-								} else {
-									$pvz_phone = '';
+								if ($this->config->get($alw_zaberi_export_status)) {
+									$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . $this->db->escape($this->config->get($alw_zaberi_export_status)) . "' WHERE order_id = '" . (int)$order_id . "'");
 								}
 
 								$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET 
-									pvz_address = '" . $this->db->escape($pvz_address) . "', 
-									pvz_phone = '" . $this->db->escape($pvz_phone) . "', 
 									barcode = '" . $this->db->escape($items[0]['barcode']) . "', 
 									status = '" . (int)$items[0]['status'] . "', 
 									splus = '" . (float)$items[0]['splus'] . "', 
@@ -544,12 +536,8 @@ class ModelShippingAlwZaberi extends Model {
 		}
 	}
 
-	public function updateOrderPickup($order_id, $pickup_id, $shipping_code) {
-		$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET final_pv = '" . $this->db->escape($pickup_id) . "', shipping_code = '" . $this->db->escape($shipping_code) . "' WHERE order_id = '" . (int)$order_id . "'");
-	}
-
-	public function updateOrderOther($order_id, $shipping_code) {
-		$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET shipping_code = '" . $this->db->escape($shipping_code) . "' WHERE order_id = '" . (int)$order_id . "'");
+	public function updateOrderPickup($order_id, $pickup_id) {
+		$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET final_pv = '" . $this->db->escape($pickup_id) . "' WHERE order_id = '" . (int)$order_id . "'");
 	}
 
 	public function install() {
@@ -596,7 +584,6 @@ class ModelShippingAlwZaberi extends Model {
 			status tinyint(2) DEFAULT NULL,
 			pvz_address varchar(255) DEFAULT NULL,
 			pvz_phone varchar(255) DEFAULT NULL,
-			shipping_code varchar(255) DEFAULT NULL,
 			PRIMARY KEY (order_id) 
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci"
 		);

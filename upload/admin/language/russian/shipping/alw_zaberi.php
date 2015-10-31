@@ -28,10 +28,13 @@ $_['tab_courier']        		= 'Доставка курьером';
 $_['tab_pickup']        		= 'Самовывоз из ПВЗ';
 $_['tab_pochta']        		= 'Почта России';
 $_['tab_export']        		= 'Экспорт заказов';
+$_['tab_status']        		= 'Статусы';
 $_['tab_data']        			= 'Данные';
 $_['tab_product']        		= 'Товары';
 
 // Text
+$_['text_status_export']     	= 'Статус экспорта';
+$_['text_status_order']     	= 'Статус заказа';
 $_['text_export_success_1']   	= 'Ожидается привоз заказа';
 $_['text_export_success_2']   	= 'На сборке';
 $_['text_export_success_3']   	= 'Заказ готов к выдаче';
