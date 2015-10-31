@@ -263,7 +263,7 @@ class ModelShippingAlwZaberi extends Model {
 	}
 
 	public function export($data) {
-		if (isset($data['type']) && $data['type'] != 0) {
+		if (isset($data['type'])) {
 			$methodName = 'add_orders_from_store';
 			$data['start_pv'] = $data['type'];
 			$goods = "			<goods>";

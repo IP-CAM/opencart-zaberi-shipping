@@ -133,7 +133,7 @@
           <tr>
             <td><?php echo $entry_type; ?></td>
             <td>
-				<label><input type="radio" name="type" value="0"><?php echo $text_normal; ?></label></br>
+				<label><input type="radio" name="type"><?php echo $text_normal; ?></label></br>
 				<?php if (isset($order['sklad']['zt1']) && count($order['sklad']['zt1']) == count($order['products'])) { ?><label><input type="radio" name="type" value="zt1"><?php echo $text_sklad; ?><?php echo $text_zt1; ?></label></br><?php } ?>
 				<?php if (isset($order['sklad']['zt2']) && count($order['sklad']['zt2']) == count($order['products'])) { ?><label><input type="radio" name="type" value="zt2"><?php echo $text_sklad; ?><?php echo $text_zt2; ?></label></br><?php } ?>
 				<?php if (isset($order['sklad']['zt3']) && count($order['sklad']['zt3']) == count($order['products'])) { ?><label><input type="radio" name="type" value="zt3"><?php echo $text_sklad; ?><?php echo $text_zt3; ?></label></br><?php } ?>

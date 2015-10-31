@@ -209,6 +209,8 @@ class ModelShippingAlwZaberi extends Model {
 
 								$cost = $pickup['tarif_price'];
 
+								$cod = $pickup['cod'];
+
 								if (isset($pickup['proezd_info'])) {
 									$pickup_proezd_info = $pickup['proezd_info'];
 								} else {
@@ -308,7 +310,7 @@ class ModelShippingAlwZaberi extends Model {
 								}
 							}
 
-							$this->session->data['alw_zaberi_pickup_id'] = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['cod'];
+							$this->session->data['alw_zaberi_pickup_id'] = $cod;
 
 							$input = array(
 								'{adress}',
