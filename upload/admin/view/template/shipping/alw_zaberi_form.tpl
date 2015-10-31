@@ -104,7 +104,14 @@
           </tr>
           <tr>
             <td><?php echo $entry_final_pv; ?></td>
-            <td><input type="text" name="final_pv" value="<?php echo $order['final_pv']; ?>" style="width: 50%" /></td>
+            <td>
+				<?php if ($order['service'] == 3) { ?>
+					<input type="hidden" name="final_pv" value="<?php echo $order['final_pv']; ?>" style="width: 50%" />
+				<?php } else { ?>
+					<input type="text" name="final_pv" value="<?php echo $order['final_pv']; ?>" style="width: 50%" />
+					</br><?php echo $order['pvz_address']; ?> [<?php echo $order['pvz_phone']; ?>]
+				<?php } ?>
+			</td>
 		  </tr>
           <tr>
             <td><?php echo $entry_weight; ?></td>
@@ -116,8 +123,21 @@
             <td><input type="text" value="<?php echo $order['tracker']; ?>" style="width: 50%" /></td>
 		  </tr>
 		  <?php } ?>
+          <?php if ($order['service'] == 3) { ?>
+		  <tr>
+            <td><?php echo $entry_rupost; ?></td>
+            <td>
+				<select name="rupost">
+                  <option value="1й класс" <?php if ($order['rupost'] == '1й класс') { ?>selected="selected"<?php } ?>>1й класс</option>
+				  <option value="Обычная почта" <?php if ($order['rupost'] == 'Обычная почта') { ?>selected="selected"<?php } ?>>Обычная почта</option>
+				  <option value="EMS" <?php if ($order['rupost'] == 'EMS') { ?>selected="selected"<?php } ?>>EMS</option>
+                </select>
+            </td>
+          </tr>
+		  <?php } else { ?>
+			<input type="hidden" name="rupost" value="<?php echo $order['rupost']; ?>"/>
+		  <?php } ?>
 				<input type="hidden" name="zip" value="<?php echo $order['zip']; ?>"/>
-				<input type="hidden" name="rupost" value="<?php echo $order['rupost']; ?>"/>
 				<input type="hidden" name="client_obl" value="<?php echo $order['client_obl']; ?>"/>
 				<input type="hidden" name="client_city" value="<?php echo $order['client_city']; ?>"/>
 				<input type="hidden" name="address" value="<?php echo $order['address']; ?>"/>

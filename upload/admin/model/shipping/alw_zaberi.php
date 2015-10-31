@@ -94,7 +94,7 @@ class ModelShippingAlwZaberi extends Model {
 		if (isset($check->row['status'])) {// order has been export
 			$query = $this->db->query("SELECT zo.* FROM " . DB_PREFIX . "alw_zaberi_order zo WHERE zo.order_id = '" . (int)$order_id . "'");
 		} else {
-			$query = $this->db->query("SELECT zo.to_city, zo.final_pv, zo.status, zo.err_text, o.order_id, o.shipping_zone AS client_obl, o.shipping_city AS client_city, CONCAT(o.shipping_address_1, ' ', o.shipping_address_2) AS address, o.comment, CONCAT(o.firstname, ' ', o.lastname) AS fio, o.telephone AS phone, o.payment_postcode AS zip, o.email, o.total, o.currency_code, o.currency_value, o.shipping_code, o.order_status_id, ot.value FROM `" . DB_PREFIX . "order` o LEFT JOIN `" . DB_PREFIX . "order_total` ot ON ot.order_id = o.order_id LEFT JOIN " . DB_PREFIX . "alw_zaberi_order zo ON zo.order_id = o.order_id WHERE o.order_id = '" . (int)$order_id . "' AND o.order_status_id > 0 AND ot.code = 'shipping'");
+			$query = $this->db->query("SELECT zo.to_city, zo.final_pv, zo.status, zo.err_text, zo.tracker, zo.pvz_address, zo.pvz_phone, o.order_id, o.shipping_zone AS client_obl, o.shipping_city AS client_city, CONCAT(o.shipping_address_1, ' ', o.shipping_address_2) AS address, o.comment, CONCAT(o.firstname, ' ', o.lastname) AS fio, o.telephone AS phone, o.payment_postcode AS zip, o.email, o.total, o.currency_code, o.currency_value, o.shipping_code, o.order_status_id, ot.value FROM `" . DB_PREFIX . "order` o LEFT JOIN `" . DB_PREFIX . "order_total` ot ON ot.order_id = o.order_id LEFT JOIN " . DB_PREFIX . "alw_zaberi_order zo ON zo.order_id = o.order_id WHERE o.order_id = '" . (int)$order_id . "' AND o.order_status_id > 0 AND ot.code = 'shipping'");
 		}
 
 		$products = $this->db->query("SELECT op.*, p.shipping, p.weight, p.weight_class_id, p.image, op.tax FROM " . DB_PREFIX . "order_product op LEFT JOIN " . DB_PREFIX . "product p ON op.product_id = p.product_id WHERE op.order_id = '" . (int)$order_id . "'");
@@ -166,7 +166,7 @@ class ModelShippingAlwZaberi extends Model {
 		}
 
 		if (isset($check->row['status'])) {// order has been export
-			$order_amount = $query->row['int_number'];
+			$order_amount = $query->row['order_amount'];
 			$int_number = $query->row['int_number'];
 			$service = $query->row['service'];
 			$d_price = $query->row['d_price'];
@@ -262,6 +262,8 @@ class ModelShippingAlwZaberi extends Model {
 			'tracker'     	 	 => $query->row['tracker'],
 			'status'     	 	 => $query->row['status'],
 			'err_text'     	 	 => $query->row['err_text'],
+			'pvz_address'     	 => $query->row['pvz_address'],
+			'pvz_phone'     	 => $query->row['pvz_phone'],
 			'shipping_code'      => $query->row['shipping_code'],
 			'products'		 	 => $products_data,
 			'product_sklad'		 => $product_sklad,
@@ -272,7 +274,7 @@ class ModelShippingAlwZaberi extends Model {
 	}
 
 	public function export($data) {
-		if (isset($data['type'])) {
+		if (isset($data['type']) && $data['type'] != 'on') {
 			$methodName = 'add_orders_from_store';
 			$data['start_pv'] = $data['type'];
 			$goods = "			<goods>";
@@ -336,7 +338,7 @@ class ModelShippingAlwZaberi extends Model {
 						</orders>
  		            </params>
 				</methodCall>";
-
+//$this->log->write($xml);
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, 'http://lc.zaberi-tovar.ru/api/');
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -344,7 +346,7 @@ class ModelShippingAlwZaberi extends Model {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, 'xml=' . $xml);
 		$result = curl_exec($ch);
 		curl_close($ch);
-
+//$this->log->write($result);
 		if (!empty($result)) {
 			$reader = new XMLReader();
 			$reader->xml($result);
@@ -511,7 +513,21 @@ class ModelShippingAlwZaberi extends Model {
 							unset($element_name);
 						} elseif ($reader->localName == 'params' && $reader->nodeType == XMLReader::END_ELEMENT) {
 							if (!empty($items) && $status == 'Ok') {
+								if (isset($items[0]['pvz_address'])) {
+									$pvz_address = $items[0]['pvz_address'];
+								} else {
+									$pvz_address = '';
+								}
+
+								if (isset($items[0]['pvz_phone'])) {
+									$pvz_phone = $items[0]['pvz_phone'];
+								} else {
+									$pvz_phone = '';
+								}
+
 								$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET 
+									pvz_address = '" . $this->db->escape($pvz_address) . "', 
+									pvz_phone = '" . $this->db->escape($pvz_phone) . "', 
 									barcode = '" . $this->db->escape($items[0]['barcode']) . "', 
 									status = '" . (int)$items[0]['status'] . "', 
 									splus = '" . (float)$items[0]['splus'] . "', 
@@ -578,6 +594,8 @@ class ModelShippingAlwZaberi extends Model {
 			sminus decimal(15,4) DEFAULT NULL,
 			sms_status tinyint(1) DEFAULT NULL,
 			status tinyint(2) DEFAULT NULL,
+			pvz_address varchar(255) DEFAULT NULL,
+			pvz_phone varchar(255) DEFAULT NULL,
 			shipping_code varchar(255) DEFAULT NULL,
 			PRIMARY KEY (order_id) 
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci"

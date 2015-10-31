@@ -695,8 +695,9 @@ class ControllerShippingAlwZaberi extends Controller {
 		$this->data['entry_comment'] = $this->language->get('entry_comment');
 		$this->data['entry_final_pv'] = $this->language->get('entry_final_pv');
 		$this->data['entry_weight'] = $this->language->get('entry_weight');
-		$this->data['entry_type'] = $this->language->get('entry_type');
 		$this->data['entry_tracker'] = $this->language->get('entry_tracker');
+		$this->data['entry_rupost'] = $this->language->get('entry_rupost');
+		$this->data['entry_type'] = $this->language->get('entry_type');
 
 		$this->data['action'] = $this->url->link('shipping/alw_zaberi/export', 'token=' . $this->session->data['token'] . '&order_id=' . $this->request->get['order_id'], 'SSL');
 		$this->data['settings'] = $this->url->link('shipping/alw_zaberi', 'token=' . $this->session->data['token'], 'SSL');
