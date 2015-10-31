@@ -33,6 +33,7 @@ $_['tab_product']        		= 'Товары';
 
 // Text
 $_['text_export_success_1']   	= 'Ожидается привоз заказа';
+$_['text_export_success_2']   	= 'На сборке';
 $_['text_export_success_3']   	= 'Заказ готов к выдаче';
 $_['text_export_success_5']   	= 'Заказ отменен покупателем';
 $_['text_export_success_10']   	= 'Заказ выдан';
@@ -97,7 +98,7 @@ $_['entry_irs']  	  			= 'Р/счет<span class="help">irs</span>';
 $_['entry_iks']  	  			= 'Кор/счет<span class="help">iks</span>';
 $_['entry_ibik']  	  			= 'Бик<span class="help">ibik</span>';
 $_['entry_status_export']     	= 'Статус экспорта';
-$_['entry_order_id']  	  		= 'Id заказа <span class="help">order_id</span>';
+$_['entry_order_id']  	  		= 'Номер заказа <span class="help">order_id</span>';
 $_['entry_int_number']  	  	= 'Внутренний номер <span class="help">int_number</span>';
 $_['entry_service']  	  		= 'Тип услуги <span class="help">service</span>';
 $_['entry_order_amount']  	  	= 'Сумма к получению <span class="help">order_amount</span>';
@@ -110,6 +111,7 @@ $_['entry_comment']  	  		= 'Комментарий покупателя <span c
 $_['entry_final_pv']  	  		= 'ПВЗ, в котором выдаем заказ <span class="help">final_pv</span>';
 $_['entry_weight']  	  		= 'Вес заказа <span class="help">weight</span>';
 $_['entry_type']  	  			= 'Тип экспорта';
+$_['entry_tracker']  	  		= 'Номер трекера';
 
 // Error
 $_['error_permission']    		= 'У Вас нет прав для управления этим модулем!';

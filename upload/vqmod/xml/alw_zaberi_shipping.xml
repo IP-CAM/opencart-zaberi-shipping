@@ -1,6 +1,6 @@
 <modification>
 	<id>Курьерская служба «Забери-Товар»</id>
-	<version>1.1.1</version>
+	<version>1</version>
 	<vqmver>2.X</vqmver>
 	<author>Woewudski</author>
 	<file name="catalog/controller/checkout/confirm.php">

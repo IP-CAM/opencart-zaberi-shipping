@@ -308,6 +308,8 @@ class ModelShippingAlwZaberi extends Model {
 								} else {
 									$pickup_longitude = '';
 								}
+
+								$cod = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['cod'];
 							}
 
 							$this->session->data['alw_zaberi_pickup_id'] = $cod;

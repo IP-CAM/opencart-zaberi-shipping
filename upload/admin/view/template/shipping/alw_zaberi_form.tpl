@@ -110,6 +110,12 @@
             <td><?php echo $entry_weight; ?></td>
             <td><input type="text" name="weight" value="<?php echo $order['weight']; ?>" style="width: 50%" /></td>
 		  </tr>
+          <?php if (isset($order['tracker'])) { ?>
+		  <tr>
+            <td><?php echo $entry_tracker; ?></td>
+            <td><input type="text" value="<?php echo $order['tracker']; ?>" style="width: 50%" /></td>
+		  </tr>
+		  <?php } ?>
 				<input type="hidden" name="zip" value="<?php echo $order['zip']; ?>"/>
 				<input type="hidden" name="rupost" value="<?php echo $order['rupost']; ?>"/>
 				<input type="hidden" name="client_obl" value="<?php echo $order['client_obl']; ?>"/>
@@ -130,7 +136,8 @@
 				<input type="hidden" name="iks" value="<?php echo $order['iks']; ?>"/>
 				<input type="hidden" name="ibik" value="<?php echo $order['ibik']; ?>"/>
 				<input type="hidden" name="shipping_code" value="<?php echo $order['shipping_code']; ?>"/>
-          <tr>
+          <?php if ($order['status'] < 1) { ?>
+		  <tr>
             <td><?php echo $entry_type; ?></td>
             <td>
 				<label><input type="radio" name="type"><?php echo $text_normal; ?></label></br>
@@ -141,6 +148,7 @@
 				<?php if (isset($order['sklad']['zt5']) && count($order['sklad']['zt5']) == count($order['products'])) { ?><label><input type="radio" name="type" value="zt5"><?php echo $text_sklad; ?><?php echo $text_zt5; ?></label><?php } ?>
 			</td>
 		  </tr>
+		  <?php } ?>
 		</table>
 	  </div>
 	  <div id="tab_product" class="vtabs-content">

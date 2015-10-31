@@ -134,13 +134,21 @@ class ModelShippingAlwZaberi extends Model {
 			foreach ($product_sklad as $key => $result) {
 				if ($result['zt1'] > 0) {
 					$sklad['zt1'][$key] = $result['zt1'];
-				} elseif ($result['zt1'] > 0) {
+				}
+
+				if ($result['zt2'] > 0) {
 					$sklad['zt2'][$key] = $result['zt2'];
-				} elseif ($result['zt3'] > 0) {
+				}
+
+				if ($result['zt3'] > 0) {
 					$sklad['zt3'][$key] = $result['zt3'];
-				} elseif ($result['zt4'] > 0) {
+				}
+
+				if ($result['zt4'] > 0) {
 					$sklad['zt4'][$key] = $result['zt4'];
-				} elseif ($result['zt5'] > 0) {
+				}
+
+				if ($result['zt5'] > 0) {
 					$sklad['zt5'][$key] = $result['zt5'];
 				}
 			}
@@ -251,6 +259,7 @@ class ModelShippingAlwZaberi extends Model {
 			'irs'     	 		 => $irs,
 			'iks'     	 		 => $iks,
 			'ibik'     	 		 => $ibik,
+			'tracker'     	 	 => $query->row['tracker'],
 			'status'     	 	 => $query->row['status'],
 			'err_text'     	 	 => $query->row['err_text'],
 			'shipping_code'      => $query->row['shipping_code'],
@@ -399,6 +408,12 @@ class ModelShippingAlwZaberi extends Model {
 									status = 0 WHERE order_id = '" . (int)$data['order_id'] . "'
 								");
 							} elseif (!empty($items) && $status == 'Ok') {
+								if (isset($items[0]['tracker'])) {
+									$tracker = $items[0]['tracker'];
+								} else {
+									$tracker = '';
+								}
+
 								$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET 
 									int_number = '" . $this->db->escape($data['int_number']) . "',
 									service = '" . (int)$data['service'] . "',
@@ -432,6 +447,7 @@ class ModelShippingAlwZaberi extends Model {
 									iks = '" . $this->db->escape($data['iks']) . "',
 									ibik = '" . $this->db->escape($data['ibik']) . "',
 									uid = '" . $this->db->escape($items[0]['result']) . "',
+									tracker = '" . $this->db->escape($tracker) . "',
 									barcode = '" . $this->db->escape($items[0]['barcode']) . "',
 									status = 1 WHERE order_id = '" . (int)$data['order_id'] . "'
 								");
