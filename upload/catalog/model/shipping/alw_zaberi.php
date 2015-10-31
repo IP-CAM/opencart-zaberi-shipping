@@ -84,6 +84,12 @@ class ModelShippingAlwZaberi extends Model {
 							if ($courier['type'] == 2) {
 								$cost = $courier['tarif_price'];
 
+								if (isset($courier['cod'])) {
+									$cod = $courier['cod'];
+								} else {
+									$cod = '';
+								}
+
 								$courier_srok_dostavki = $courier['srok_dostavki'];
 
 								$input = array(
@@ -109,6 +115,7 @@ class ModelShippingAlwZaberi extends Model {
 										'cost'          => $cost,
 										'tax_class_id'  => $this->config->get('alw_zaberi_tax_class_id_courier'),
 										'text'          => $text,
+										'courier_id'	=> $cod,
 										'delivery_type' => 'courier'
 									);
 								}
@@ -573,6 +580,12 @@ class ModelShippingAlwZaberi extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "alw_zaberi_order WHERE order_id = '" . (int)$order_id . "'");
 
 		$this->db->query("INSERT INTO " . DB_PREFIX . "alw_zaberi_order SET order_id = '" . (int)$order_id . "', final_pv = '" . $this->db->escape($pickup_id) . "', pvz_address = '" . $this->db->escape($pvz_address) . "', pvz_phone = '" . $this->db->escape($pvz_phone) . "', to_city = '" . $this->db->escape($city_id) . "'");
+	}
+
+	function addOrderCourier($order_id, $courier_id, $city_id) {
+		$this->db->query("DELETE FROM " . DB_PREFIX . "alw_zaberi_order WHERE order_id = '" . (int)$order_id . "'");
+
+		$this->db->query("INSERT INTO " . DB_PREFIX . "alw_zaberi_order SET order_id = '" . (int)$order_id . "', final_pv = '" . $this->db->escape($courier_id) . "', to_city = '" . $this->db->escape($city_id) . "'");
 	}
 
 	function addOrderOther($order_id, $city_id) {

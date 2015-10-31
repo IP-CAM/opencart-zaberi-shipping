@@ -24,7 +24,7 @@ $this->data['products'] = array();
 			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pochta' && isset($this->session->data['alw_zaberi_city'])) {
 				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
 			} elseif (substr($alw_zaberi['code'], 0, 11) == 'alw_zaberi.' && isset($this->session->data['alw_zaberi_city'])) {
-				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
+				$this->model_shipping_alw_zaberi->addOrderCourier($this->session->data['order_id'], $alw_zaberi['courier_id'], $this->session->data['alw_zaberi_city']);
 			}
 			]]></add>
 		</operation>
@@ -112,7 +112,7 @@ return $order_id;
 			} elseif ($alw_zaberi['code'] == 'alw_zaberi.alw_zaberi_pochta' && isset($this->session->data['alw_zaberi_city'])) {
 				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
 			} elseif (substr($alw_zaberi['code'], 0, 11) == 'alw_zaberi.' && isset($this->session->data['alw_zaberi_city'])) {
-				$this->model_shipping_alw_zaberi->addOrderOther($this->session->data['order_id'], $this->session->data['alw_zaberi_city']);
+				$this->model_shipping_alw_zaberi->addOrderCourier($this->session->data['order_id'], $alw_zaberi['courier_id'], $this->session->data['alw_zaberi_city']);
 			}
 			]]></add>
 		</operation>
