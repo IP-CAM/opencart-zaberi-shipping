@@ -109,7 +109,7 @@
 					<input type="hidden" name="final_pv" value="<?php echo $order['final_pv']; ?>" style="width: 50%" />
 				<?php } else { ?>
 					<input type="text" name="final_pv" value="<?php echo $order['final_pv']; ?>" style="width: 50%" />
-					</br><?php echo $order['pvz_address']; ?> [<?php echo $order['pvz_phone']; ?>]
+					</br><?php echo $order['pvz_address']; ?> <?php echo $order['pvz_phone']; ?> <?php echo $order['pvz_srok']; ?>
 				<?php } ?>
 			</td>
 		  </tr>
@@ -117,12 +117,10 @@
             <td><?php echo $entry_weight; ?></td>
             <td><input type="text" name="weight" value="<?php echo $order['weight']; ?>" style="width: 50%" /></td>
 		  </tr>
-          <?php if (isset($order['tracker'])) { ?>
 		  <tr>
             <td><?php echo $entry_tracker; ?></td>
-            <td><input type="text" value="<?php echo $order['tracker']; ?>" style="width: 50%" /></td>
+            <td><?php echo $order['tracker']; ?></td>
 		  </tr>
-		  <?php } ?>
           <?php if ($order['service'] == 3) { ?>
 		  <tr>
             <td><?php echo $entry_rupost; ?></td>
@@ -137,10 +135,22 @@
 		  <?php } else { ?>
 			<input type="hidden" name="rupost" value="<?php echo $order['rupost']; ?>"/>
 		  <?php } ?>
-				<input type="hidden" name="zip" value="<?php echo $order['zip']; ?>"/>
-				<input type="hidden" name="client_obl" value="<?php echo $order['client_obl']; ?>"/>
-				<input type="hidden" name="client_city" value="<?php echo $order['client_city']; ?>"/>
-				<input type="hidden" name="address" value="<?php echo $order['address']; ?>"/>
+          <tr>
+            <td><?php echo $entry_zip; ?></td>
+            <td><input type="text" name="zip" value="<?php echo $order['zip']; ?>" style="width: 50%" /></td>
+		  </tr>
+          <tr>
+            <td><?php echo $entry_client_obl; ?></td>
+            <td><input type="text" name="client_obl" value="<?php echo $order['client_obl']; ?>" style="width: 50%" /></td>
+		  </tr>
+          <tr>
+            <td><?php echo $entry_client_city; ?></td>
+            <td><input type="text" name="client_city" value="<?php echo $order['client_city']; ?>" style="width: 50%" /></td>
+		  </tr>
+          <tr>
+            <td><?php echo $entry_address; ?></td>
+            <td><input type="text" name="address" value="<?php echo $order['address']; ?>" style="width: 50%" /></td>
+		  </tr>
 				<input type="hidden" name="zip_c" value="<?php echo $order['zip_c']; ?>"/>
 				<input type="hidden" name="client_city_c" value="<?php echo $order['client_city_c']; ?>"/>
 				<input type="hidden" name="address_c" value="<?php echo $order['address_c']; ?>"/>

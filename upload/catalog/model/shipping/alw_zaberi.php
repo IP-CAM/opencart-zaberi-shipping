@@ -78,26 +78,25 @@ class ModelShippingAlwZaberi extends Model {
 
 					if (!empty($alw_zaberi['alw_zaberi_cost'])) {
 						unset($title);
-						unset($courier_srok_dostavki);
 
 						foreach ($alw_zaberi['alw_zaberi_cost'] as $key => $courier) {
 							if ($courier['type'] == 2) {
 								$cost = $courier['tarif_price'];
 
 								if (isset($courier['cod'])) {
-									$cod = $courier['cod'];
+									$courier_cod = $courier['cod'];
 								} else {
-									$cod = '';
+									$courier_cod = '';
 								}
 
-								$courier_srok_dostavki = $courier['srok_dostavki'];
+								$courier_srok = $courier['srok_dostavki'];
 
 								$input = array(
 									'{days}'
 								);
 
 								$output = array(
-									'days' => $courier_srok_dostavki
+									'days' => $courier_srok
 								);
 
 								$title = html_entity_decode(str_replace($input, $output, $this->config->get('alw_zaberi_description_courier')));
@@ -115,8 +114,8 @@ class ModelShippingAlwZaberi extends Model {
 										'cost'          => $cost,
 										'tax_class_id'  => $this->config->get('alw_zaberi_tax_class_id_courier'),
 										'text'          => $text,
-										'courier_id'	=> $cod,
-										'delivery_type' => 'courier'
+										'courier_cod'	=> $courier_cod,
+										'courier_srok'	=> $courier_srok
 									);
 								}
 							} else {
@@ -217,7 +216,7 @@ class ModelShippingAlwZaberi extends Model {
 
 								$cost = $pickup['tarif_price'];
 
-								$cod = $pickup['cod'];
+								$pickup_cod = $pickup['cod'];
 
 								if (isset($pickup['proezd_info'])) {
 									$pickup_proezd_info = $pickup['proezd_info'];
@@ -232,9 +231,9 @@ class ModelShippingAlwZaberi extends Model {
 								}
 
 								if (isset($pickup['srok_dostavki'])) {
-									$pickup_srok_dostavki = $pickup['srok_dostavki'];
+									$pickup_srok = $pickup['srok_dostavki'];
 								} else {
-									$pickup_srok_dostavki = '';
+									$pickup_srok = '';
 								}
 
 								if (isset($pickup['adress'])) {
@@ -275,7 +274,7 @@ class ModelShippingAlwZaberi extends Model {
 							if (!isset($this->session->data['alw_zaberi_pickup_id']) || empty($pickup_adress)) {
 								$cost = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['tarif_price'];
 
-								$cod = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['cod'];
+								$pickup_cod = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['cod'];
 
 								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['proezd_info'])) {
 									$pickup_proezd_info = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['proezd_info'];
@@ -290,9 +289,9 @@ class ModelShippingAlwZaberi extends Model {
 								}
 
 								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['srok_dostavki'])) {
-									$pickup_srok_dostavki = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['srok_dostavki'];
+									$pickup_srok = $alw_zaberi['alw_zaberi_cost'][$pickup_key]['srok_dostavki'];
 								} else {
-									$pickup_srok_dostavki = '';
+									$pickup_srok = '';
 								}
 
 								if (isset($alw_zaberi['alw_zaberi_cost'][$pickup_key]['adress'])) {
@@ -320,9 +319,7 @@ class ModelShippingAlwZaberi extends Model {
 								}
 							}
 
-							$this->session->data['alw_zaberi_pickup_id'] = $cod;
-							$this->session->data['alw_zaberi_pickup_adress'] = $pickup_adress;
-							$this->session->data['alw_zaberi_pickup_phone'] = $pickup_phone;
+							$this->session->data['alw_zaberi_pickup_id'] = $pickup_cod;
 
 							$input = array(
 								'{adress}',
@@ -337,7 +334,7 @@ class ModelShippingAlwZaberi extends Model {
 								'worktime'  => $pickup_worktime,
 								'info' 		=> $pickup_proezd_info,
 								'phone'     => $pickup_phone,
-								'days' 		=> $pickup_srok_dostavki
+								'days' 		=> $pickup_srok
 							);
 
 							$title = html_entity_decode(str_replace($input, $output, $this->config->get('alw_zaberi_description_pickup')));
@@ -360,8 +357,11 @@ class ModelShippingAlwZaberi extends Model {
 									'cost'          	=> $cost,
 									'tax_class_id' 	 	=> $this->config->get('alw_zaberi_tax_class_id_pickup'),
 									'text'          	=> $text,
-									'delivery_type'	 	=> 'pickup',
-									'description'		=> $pickups
+									'description'		=> $pickups,
+									'pickup_cod'	 	=> $pickup_cod,
+									'pickup_srok'	 	=> $pickup_srok,
+									'pickup_adress'	 	=> $pickup_adress,
+									'pickup_phone'	 	=> $pickup_phone
 								);
 							}
 						}
@@ -576,16 +576,16 @@ class ModelShippingAlwZaberi extends Model {
 		}
     }
 
-	function addOrderPickup($order_id, $pickup_id, $pvz_address, $pvz_phone, $city_id) {
+	function addOrderPickup($order_id, $pickup_cod, $pickup_srok, $pickup_adress, $pickup_phone, $city_id) {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "alw_zaberi_order WHERE order_id = '" . (int)$order_id . "'");
 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "alw_zaberi_order SET order_id = '" . (int)$order_id . "', final_pv = '" . $this->db->escape($pickup_id) . "', pvz_address = '" . $this->db->escape($pvz_address) . "', pvz_phone = '" . $this->db->escape($pvz_phone) . "', to_city = '" . $this->db->escape($city_id) . "'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "alw_zaberi_order SET order_id = '" . (int)$order_id . "', final_pv = '" . $this->db->escape($pickup_cod) . "', pvz_srok = '" . $this->db->escape($pickup_srok) . "', pvz_address = '" . $this->db->escape($pickup_adress) . "', pvz_phone = '" . $this->db->escape($pickup_phone) . "', to_city = '" . $this->db->escape($city_id) . "'");
 	}
 
-	function addOrderCourier($order_id, $courier_id, $city_id) {
+	function addOrderCourier($order_id, $courier_cod, $courier_srok, $city_id) {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "alw_zaberi_order WHERE order_id = '" . (int)$order_id . "'");
 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "alw_zaberi_order SET order_id = '" . (int)$order_id . "', final_pv = '" . $this->db->escape($courier_id) . "', to_city = '" . $this->db->escape($city_id) . "'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "alw_zaberi_order SET order_id = '" . (int)$order_id . "', final_pv = '" . $this->db->escape($courier_cod) . "', pvz_srok = '" . $this->db->escape($courier_srok) . "', to_city = '" . $this->db->escape($city_id) . "'");
 	}
 
 	function addOrderOther($order_id, $city_id) {

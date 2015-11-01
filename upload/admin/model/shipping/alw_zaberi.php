@@ -17,6 +17,18 @@ class ModelShippingAlwZaberi extends Model {
 
 		$query = $this->db->query($sql);
 
+		$order_ids = array();
+
+		foreach ($query->rows as $order) {
+			if ($order['status'] > 0) {
+				$order_ids[] = $order['order_id'];
+			}
+		}
+
+		if (count($order_ids) > 0) {
+			$this->updateOrderStatuses($order_ids);
+		}
+
 		return $query->rows;
 	}
 
@@ -94,7 +106,7 @@ class ModelShippingAlwZaberi extends Model {
 		if (isset($check->row['status'])) {// order has been export
 			$query = $this->db->query("SELECT zo.* FROM " . DB_PREFIX . "alw_zaberi_order zo WHERE zo.order_id = '" . (int)$order_id . "'");
 		} else {
-			$query = $this->db->query("SELECT zo.to_city, zo.final_pv, zo.status, zo.err_text, zo.tracker, zo.pvz_address, zo.pvz_phone, o.order_id, o.shipping_zone AS client_obl, o.shipping_city AS client_city, CONCAT(o.shipping_address_1, ' ', o.shipping_address_2) AS address, o.comment, CONCAT(o.firstname, ' ', o.lastname) AS fio, o.telephone AS phone, o.payment_postcode AS zip, o.email, o.total, o.currency_code, o.currency_value, o.shipping_code, o.order_status_id, ot.value FROM `" . DB_PREFIX . "order` o LEFT JOIN `" . DB_PREFIX . "order_total` ot ON ot.order_id = o.order_id LEFT JOIN " . DB_PREFIX . "alw_zaberi_order zo ON zo.order_id = o.order_id WHERE o.order_id = '" . (int)$order_id . "' AND o.order_status_id > 0 AND ot.code = 'shipping'");
+			$query = $this->db->query("SELECT zo.to_city, zo.final_pv, zo.status, zo.err_text, zo.tracker, zo.pvz_address, zo.pvz_phone, zo.pvz_srok, o.order_id, o.shipping_zone AS client_obl, o.shipping_city AS client_city, CONCAT(o.shipping_address_1, ' ', o.shipping_address_2) AS address, o.comment, CONCAT(o.firstname, ' ', o.lastname) AS fio, o.telephone AS phone, o.payment_postcode AS zip, o.email, o.total, o.currency_code, o.currency_value, o.shipping_code, o.order_status_id, ot.value FROM `" . DB_PREFIX . "order` o LEFT JOIN `" . DB_PREFIX . "order_total` ot ON ot.order_id = o.order_id LEFT JOIN " . DB_PREFIX . "alw_zaberi_order zo ON zo.order_id = o.order_id WHERE o.order_id = '" . (int)$order_id . "' AND o.order_status_id > 0 AND ot.code = 'shipping'");
 		}
 
 		$products = $this->db->query("SELECT op.*, p.shipping, p.weight, p.weight_class_id, p.image, op.tax FROM " . DB_PREFIX . "order_product op LEFT JOIN " . DB_PREFIX . "product p ON op.product_id = p.product_id WHERE op.order_id = '" . (int)$order_id . "'");
@@ -264,6 +276,7 @@ class ModelShippingAlwZaberi extends Model {
 			'err_text'     	 	 => $query->row['err_text'],
 			'pvz_address'     	 => $query->row['pvz_address'],
 			'pvz_phone'     	 => $query->row['pvz_phone'],
+			'pvz_srok'     		 => $query->row['pvz_srok'],
 			'shipping_code'      => $query->row['shipping_code'],
 			'products'		 	 => $products_data,
 			'product_sklad'		 => $product_sklad,
@@ -338,7 +351,7 @@ class ModelShippingAlwZaberi extends Model {
 						</orders>
  		            </params>
 				</methodCall>";
-//$this->log->write($xml);
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, 'http://lc.zaberi-tovar.ru/api/');
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -346,7 +359,7 @@ class ModelShippingAlwZaberi extends Model {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, 'xml=' . $xml);
 		$result = curl_exec($ch);
 		curl_close($ch);
-//$this->log->write($result);
+
 		if (!empty($result)) {
 			$reader = new XMLReader();
 			$reader->xml($result);
@@ -536,6 +549,76 @@ class ModelShippingAlwZaberi extends Model {
 		}
 	}
 
+	function updateOrderStatuses($order_ids) {
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+				<methodCall>
+					<methodName>get_orders_by_order_id</methodName>
+					<client_name>" . $this->config->get('alw_zaberi_login') . "</client_name>
+		         	<client_api_id>" . $this->config->get('alw_zaberi_key') . "</client_api_id>
+					<params>
+						<orders>";
+
+		foreach ($order_ids as $order_id) {
+			$xml .= 	"			<order_id>" . $order_id . "</order_id>";
+		}
+
+		$xml .= "		</orders>
+ 		            </params>
+				</methodCall>";
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'http://lc.zaberi-tovar.ru/api/');
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, 'xml=' . $xml);
+		$result = curl_exec($ch);
+		curl_close($ch);
+
+		if (!empty($result)) {
+			$reader = new XMLReader();
+			$reader->xml($result);
+
+			$items = array();
+			$status = '';
+			$error = '';
+			$key = 0;
+
+			while ($reader->read()){
+				if ($reader->localName == 'status' && $reader->nodeType == XMLReader::ELEMENT) {
+					$reader->read();
+					$status = $reader->value;
+				} elseif ($reader->localName == 'global_err_text' && $reader->nodeType == XMLReader::ELEMENT) {
+					$reader->read();
+					$error = $reader->value;
+				} elseif ($reader->localName == 'item') {
+					while ($reader->read()){
+						if ($reader->nodeType == XMLReader::ELEMENT) { // element name
+							$element_name = $reader->name;
+						} elseif ($reader->nodeType == XMLReader::TEXT) { // element value
+							$items[$key][$element_name] = $reader->value;
+						} elseif ($reader->localName == 'item' && $reader->nodeType == XMLReader::END_ELEMENT) { // go to next item
+							$key++;
+							unset($element_name);
+						} elseif ($reader->localName == 'params' && $reader->nodeType == XMLReader::END_ELEMENT) {
+							if (!empty($items) && $status == 'Ok') {
+								$alw_zaberi_export_status = 'alw_zaberi_export_status_' . $items[0]['status'];
+
+								if ($this->config->get($alw_zaberi_export_status)) {
+									$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . $this->db->escape($this->config->get($alw_zaberi_export_status)) . "' WHERE order_id = '" . (int)$order_id . "'");
+								}
+
+								$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET status = '" . (int)$items[0]['status'] . "' WHERE order_id = '" . (int)$order_id . "'");
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			$reader->close();
+		}
+	}
+
 	public function updateOrderPickup($order_id, $pickup_id) {
 		$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET final_pv = '" . $this->db->escape($pickup_id) . "' WHERE order_id = '" . (int)$order_id . "'");
 	}
@@ -584,6 +667,7 @@ class ModelShippingAlwZaberi extends Model {
 			status tinyint(2) DEFAULT NULL,
 			pvz_address varchar(255) DEFAULT NULL,
 			pvz_phone varchar(255) DEFAULT NULL,
+			pvz_srok varchar(255) DEFAULT NULL,
 			PRIMARY KEY (order_id) 
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci"
 		);
