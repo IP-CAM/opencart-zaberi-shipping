@@ -537,6 +537,7 @@ class ModelShippingAlwZaberi extends Model {
 								}
 
 								$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET 
+									tracker = '" . $this->db->escape($items[0]['tracker']) . "', 
 									barcode = '" . $this->db->escape($items[0]['barcode']) . "', 
 									status = '" . (int)$items[0]['status'] . "', 
 									splus = '" . (float)$items[0]['splus'] . "', 
