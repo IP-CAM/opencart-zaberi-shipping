@@ -605,13 +605,18 @@ class ModelShippingAlwZaberi extends Model {
 							unset($element_name);
 						} elseif ($reader->localName == 'params' && $reader->nodeType == XMLReader::END_ELEMENT) {
 							if (!empty($items) && $status == 'Ok') {
-								$alw_zaberi_export_status = 'alw_zaberi_export_status_' . $items[0]['status'];
+								foreach ($items as $item) {
+									if (isset($item['status'])) {
+										$alw_zaberi_export_status = 'alw_zaberi_export_status_' . $item['status'];
 
-								if ($this->config->get($alw_zaberi_export_status)) {
-									$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . $this->db->escape($this->config->get($alw_zaberi_export_status)) . "' WHERE order_id = '" . (int)$order_id . "'");
+										if ($this->config->get($alw_zaberi_export_status)) {
+											$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . $this->db->escape($this->config->get($alw_zaberi_export_status)) . "' WHERE order_id = '" . (int)$item['order_id'] . "'");
+										}
+
+										$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET status = '" . (int)$item['status'] . "' WHERE order_id = '" . (int)$item['order_id'] . "'");
+									}
 								}
 
-								$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET status = '" . (int)$items[0]['status'] . "' WHERE order_id = '" . (int)$order_id . "'");
 								break;
 							}
 						}
