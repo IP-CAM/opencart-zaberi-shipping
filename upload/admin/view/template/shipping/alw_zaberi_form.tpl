@@ -19,6 +19,7 @@
 		<a href="<?php echo $orders; ?>" class="button" style="float: left;"><?php echo $button_orders; ?></a>
 		<img src="view/image/setting.png" style="float: left;margin: 0 50px 0 10px;" />
 		<?php if ($order['status'] < 1) { ?><a onclick="$('#form').submit();" class="button"><?php echo $button_send; ?></a><?php } ?>
+		<?php if ($order['status'] < 1) { ?><a href="<?php echo $cancel_order; ?>" class="button"><?php echo $button_cancel_order; ?></a><?php } ?>
 		<a href="<?php echo $cancel; ?>" class="button"><?php echo $button_cancel; ?></a>
 	  </div>
     </div>

@@ -1,7 +1,7 @@
 <?php
 class ModelShippingAlwZaberi extends Model {
 	public function getOrders($data = array()) {
-		$sql = "SELECT o.order_id, o.customer_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, o.total, o.currency_code, o.currency_value, o.telephone, o.shipping_code, o.shipping_country, o.shipping_zone, o.shipping_address_1, o.shipping_city, o.email, o.comment, o.payment_postcode, o.payment_method, o.shipping_method, zo.status, zo.err_text FROM `" . DB_PREFIX . "order` o LEFT JOIN `" . DB_PREFIX . "alw_zaberi_order` zo ON zo.order_id = o.order_id WHERE o.order_status_id > 0 AND o.shipping_code LIKE 'alw_zaberi.%' ORDER BY o.order_id DESC";
+		$sql = "SELECT o.order_id, o.customer_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, o.total, o.currency_code, o.currency_value, o.telephone, o.shipping_code, o.shipping_country, o.shipping_zone, o.shipping_address_1, o.shipping_city, o.email, o.comment, o.payment_postcode, o.payment_method, o.shipping_method, zo.order_amount, zo.status, zo.err_text FROM `" . DB_PREFIX . "order` o LEFT JOIN `" . DB_PREFIX . "alw_zaberi_order` zo ON zo.order_id = o.order_id WHERE o.order_status_id > 0 AND o.shipping_code LIKE 'alw_zaberi.%' ORDER BY o.order_id DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
@@ -476,6 +476,10 @@ class ModelShippingAlwZaberi extends Model {
 
 			$reader->close();
 		}
+	}
+
+	public function cancel_order($order_id) {
+		$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET status = 5 WHERE order_id = '" . (int)$order_id . "'");
 	}
 
 	function updateOrderStatus($order_id) {

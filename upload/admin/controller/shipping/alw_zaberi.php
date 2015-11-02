@@ -762,11 +762,17 @@ class ControllerShippingAlwZaberi extends Controller {
 				$customer = $result['customer'];
 			}
 
+			if ($result['status'] > 0) {
+				$total = $this->currency->format($result['order_amount'], $result['currency_code'], $result['currency_value']);
+			} else {
+				$total = $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']);
+			}
+
 			$this->data['orders'][] = array(
 				'order_id'     	 	 => $result['order_id'],
 				'customer'      	 => $customer,
 				'shipping_method'    => $shipping_method,
-				'total'     	     => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+				'total'     	     => $total,
 				'href'      	     => $this->url->link('sale/order/update', 'token=' . $this->session->data['token'] . '&order_id=' . $result['order_id'], 'SSL'),
 				'form'      	     => $this->url->link('shipping/alw_zaberi/form', 'token=' . $this->session->data['token'] . '&order_id=' . $result['order_id'], 'SSL'),
 				'status'		     => $status
@@ -814,6 +820,7 @@ class ControllerShippingAlwZaberi extends Controller {
 		$this->data['button_send'] = $this->language->get('button_send');
 		$this->data['button_settings'] = $this->language->get('button_settings');
 		$this->data['button_orders'] = $this->language->get('button_orders');
+		$this->data['button_cancel_order'] = $this->language->get('button_cancel_order');
 		$this->data['button_cancel'] = $this->language->get('button_cancel');
 		$this->data['column_image'] = $this->language->get('column_image');
 		$this->data['column_name'] = $this->language->get('column_name');
@@ -857,6 +864,7 @@ class ControllerShippingAlwZaberi extends Controller {
 		$this->data['action'] = $this->url->link('shipping/alw_zaberi/export', 'token=' . $this->session->data['token'] . '&order_id=' . $this->request->get['order_id'], 'SSL');
 		$this->data['settings'] = $this->url->link('shipping/alw_zaberi', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['orders'] = $this->url->link('shipping/alw_zaberi/orders', 'token=' . $this->session->data['token'], 'SSL');
+		$this->data['cancel_order'] = $this->url->link('shipping/alw_zaberi/cancel_order', 'token=' . $this->session->data['token'] . '&order_id=' . $this->request->get['order_id'], 'SSL');
 		$this->data['cancel'] = $this->url->link('extension/shipping', 'token=' . $this->session->data['token'], 'SSL');
 
 		if (isset($this->session->data['warning'])) {
@@ -916,6 +924,22 @@ class ControllerShippingAlwZaberi extends Controller {
 
 		$this->response->setOutput($this->render());
 	}
+
+    public function cancel_order() {
+		$this->language->load('shipping/alw_zaberi');
+
+		$this->load->model('shipping/alw_zaberi');
+
+        $result = $this->model_shipping_alw_zaberi->cancel_order($this->request->get['order_id']);
+
+		if (isset($result)) {
+			$this->session->data['success'] = $this->language->get('text_success');
+		} else {
+			$this->session->data['warning'] = $this->language->get('text_fail');
+		}
+
+		$this->redirect($this->url->link('shipping/alw_zaberi/form', 'token=' . $this->session->data['token'] . '&order_id=' . $this->request->get['order_id'], 'SSL'));
+    }
 
     public function export() {
 		$this->language->load('shipping/alw_zaberi');

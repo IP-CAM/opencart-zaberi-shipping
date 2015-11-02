@@ -261,7 +261,7 @@ class ModelShippingAlwZaberi extends Model {
 								}
 							}
 
-							$pickups .= '>' . $pickup['adress'] . '</option>';
+							$pickups .= '>' . $pickup['adress'] . ' - срок доставки: ' . $pickup['srok_dostavki'] . '</option>';
 						}
 
 						$pickups .= '</select>';
