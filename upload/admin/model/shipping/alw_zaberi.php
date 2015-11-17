@@ -277,7 +277,6 @@ class ModelShippingAlwZaberi extends Model {
 			'pvz_address'     	 => $query->row['pvz_address'],
 			'pvz_phone'     	 => $query->row['pvz_phone'],
 			'pvz_srok'     		 => $query->row['pvz_srok'],
-			'shipping_code'      => $query->row['shipping_code'],
 			'products'		 	 => $products_data,
 			'product_sklad'		 => $product_sklad,
 			'sklad'		 		 => $sklad
@@ -534,6 +533,12 @@ class ModelShippingAlwZaberi extends Model {
 
 								if ($this->config->get($alw_zaberi_export_status)) {
 									$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . $this->db->escape($this->config->get($alw_zaberi_export_status)) . "' WHERE order_id = '" . (int)$order_id . "'");
+								}
+
+								if (isset($items[0]['tracker'])) {
+									$tracker = $items[0]['tracker'];
+								} else {
+									$tracker = '';
 								}
 
 								$this->db->query("UPDATE " . DB_PREFIX . "alw_zaberi_order SET 

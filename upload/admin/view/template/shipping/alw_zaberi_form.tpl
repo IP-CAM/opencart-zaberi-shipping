@@ -166,7 +166,6 @@
 				<input type="hidden" name="irs" value="<?php echo $order['irs']; ?>"/>
 				<input type="hidden" name="iks" value="<?php echo $order['iks']; ?>"/>
 				<input type="hidden" name="ibik" value="<?php echo $order['ibik']; ?>"/>
-				<input type="hidden" name="shipping_code" value="<?php echo $order['shipping_code']; ?>"/>
           <?php if ($order['status'] < 1) { ?>
 		  <tr>
             <td><?php echo $entry_type; ?></td>
