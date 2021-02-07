@@ -1,41 +1,41 @@
-# Курьерская служба «Забери-Товар» для OpenCart 1.5.х
+# Courier service "Take the Goods" for OpenCart 1.5.x
 
-Модуль для расчета стоимости доставки и экспорта заказов через API курьерской службы «Забери-Товар».
+Module for calculating the cost of delivery and export of orders through the API of the courier service "Take-Goods".
 
-## Особенности
+## Features
 
-- Необходим vQmod.
-- Работает с модулем simple.
+- Requires vQmod.
+- Works with the simple module.
 
-## Совместимость
+## Compatibility
 
 - OpenCart 1.5.6.4
 - ocStore 1.5.5.1.2
 
-## Установка
+## Installation
 
-- Скопировать содержимое папки upload в корневой каталог сайта (стандартные файлы не перезаписываются).
-- Установить модуль.
+- Copy the contents of the upload folder to the root directory of the site (standard files are not overwritten).
+- Install the module.
 
-## Скриншоты
-![Admin Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/01.png)
+## Screenshots
+! [Admin Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/01.png)
 
-![Admin Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/02.png)
+! [Admin Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/02.png)
 
-![Admin Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/03.png)
+! [Admin Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/03.png)
 
-![Admin Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/04.png)
+! [Admin Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/04.png)
 
-![Admin Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/05.png)
+! [Admin Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/05.png)
 
-![Admin Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/06.png)
+! [Admin Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/06.png)
 
-![Admin Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/07.png)
+! [Admin Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/07.png)
 
-![Admin Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/08.png)
+! [Admin Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/08.png)
 
-![Checkout Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/09.png)
+! [Checkout Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/09.png)
 
-![Checkout Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/10.png)
+! [Checkout Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/10.png)
 
-![Checkout Demo](https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/11.png)
+! [Checkout Demo] (https://github.com/Woewudski/opencart-zaberi-shipping/blob/master/doc_img/11.png) 
